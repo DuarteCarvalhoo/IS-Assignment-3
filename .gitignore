@@ -1,0 +1,15 @@
+*.classpath
+*.project
+*.DS_Store
+
+/projeto3-parent/target
+*.class
+
+*.lst
+
+*.jar
+
+
+*.ear
+
+*.war
