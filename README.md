@@ -2,4 +2,4 @@
 
 -mvn clean install
 
--mvn exec: java -Dexec.mainClass=data.SimpleProducer
+-mvn exec:java -Dexec.mainClass=data.SimpleProducer
