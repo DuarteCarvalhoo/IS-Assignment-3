@@ -1,0 +1,11 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - SimpleProducer",
+            "request": "launch",
+            "mainClass": "data.SimpleProducer",
+            "projectName": "project"
+        }
+    ]
+}
