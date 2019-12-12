@@ -1,4 +1,4 @@
-package org.project.data;
+package org.projeto2.data;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
