@@ -1,4 +1,8 @@
 -------------------------------------------------------------------------------
 Test set: org.projeto2.data.AppTest
 -------------------------------------------------------------------------------
+<<<<<<< HEAD:projeto3-parent/project/target/surefire-reports/org.projeto2.data.AppTest.txt
 Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.023 sec
+=======
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.007 sec
+>>>>>>> master:projeto3-parent/project/target/surefire-reports/org.project.data.AppTest.txt
