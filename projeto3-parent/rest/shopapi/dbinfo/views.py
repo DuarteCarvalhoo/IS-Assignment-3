@@ -1,7 +1,6 @@
 from django.shortcuts import render
 
 from .models import Country, Item
-from .forms import CountryForm
 
 from django.http import *
 from django.views.decorators.csrf import csrf_exempt
@@ -10,8 +9,6 @@ from django.views.decorators.csrf import csrf_exempt
 
 @csrf_exempt
 def add_country(request):
-    country_form = CountryForm(request.POST)
-    if country_form.is_valid():
-        country = country_form.save(commit=False)
-        return HttpResponse("DONE")
-    return HttpResponseNotAllowed()
+    country = Country("3","japao")
+    country.save()
+    return HttpResponse()
