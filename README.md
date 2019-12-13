@@ -18,6 +18,12 @@ bin/kafka-console-producer.sh --broker-list localhost:9092 --topic test
 Create consumer:
 bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic test --from-beginning
 
+Start Source Connector:
+bin/connect-standalone.sh config/connect-standalone.properties config/connect-jdbc-source-is3.properties
+bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic DBInfo --from-beginning
+
+Start Sink Connector:
+
 
 
 
