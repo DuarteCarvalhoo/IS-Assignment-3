@@ -19,7 +19,8 @@ Create consumer:
 bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic test --from-beginning
 
 Start Source Connector:
-bin/connect-standalone.sh config/connect-standalone.properties config/connect-jdbc-source-is3.properties
+bin/connect-standalone.sh config/connect-standalone.properties config/connect-jdbc-source-is3-items.properties
+bin/connect-standalone.sh config/connect-standalone.properties config/connect-jdbc-source-is3-countries.properties
 bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic DBInfo --from-beginning
 
 Start Sink Connector:

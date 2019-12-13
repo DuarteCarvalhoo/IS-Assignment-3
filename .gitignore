@@ -2,7 +2,6 @@
 *.project
 *.DS_Store
 
-/projeto3-parent/target
 *.class
 
 *.lst
@@ -15,3 +14,7 @@
 *.war
 
 projeto3-parent/rest/shopapi/shopapi/settings.py
+
+projeto3-parent/project/target/maven-archiver/
+
+projeto3-parent/project/target/
