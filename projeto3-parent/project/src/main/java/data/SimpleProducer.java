@@ -18,9 +18,7 @@ public class SimpleProducer {
  public static void main(String[] args) throws Exception{
 
   //Assign topicName to string variable
-  //String topicName = args[0].toString();
-
-  String topicName = "test1";
+  String topicName = args[0].toString();
 
   // create instance for properties to access producer configs   
   Properties props = new Properties();

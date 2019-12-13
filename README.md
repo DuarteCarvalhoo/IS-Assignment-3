@@ -29,5 +29,5 @@ Start Sink Connector:
 
 
 Run java class with maven:
--mvn clean install
--mvn exec:java -Dexec.mainClass=data.SimpleProducer
+mvn clean install
+mvn exec:java -Dexec.mainClass=data.SimpleProducer -Dexec.args="DBInfo"
