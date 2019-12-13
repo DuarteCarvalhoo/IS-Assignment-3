@@ -12,3 +12,9 @@ def add_country(request):
     country = Country("3","japao")
     country.save()
     return HttpResponse()
+
+@csrf_exempt
+def add_item(request):
+    item = Item("1","pen",99.99)
+    item.save()
+    return HttpResponse()
