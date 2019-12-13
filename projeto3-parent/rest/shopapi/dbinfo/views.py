@@ -15,4 +15,6 @@ def add_country(request):
 
 @csrf_exempt
 def add_item(request):
+    item = Item("1","pen",99.99)
+    item.save()
     return HttpResponse()
