@@ -20,3 +20,5 @@ projeto3-parent/project/target/maven-archiver/
 projeto3-parent/project/target/
 
 projeto3-parent/rest/shopapi/dbinfo/migrations/
+
+projeto3-parent/rest/shopapi/statistics/migrations/

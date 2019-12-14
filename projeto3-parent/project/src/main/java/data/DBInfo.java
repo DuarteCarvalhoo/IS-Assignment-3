@@ -32,8 +32,8 @@ import org.json.simple.parser.ParseException;
 public class DBInfo {
     private final static String topic = "DBInfo";
     private final static String BOOTSTRAP_SERVERS = "localhost:9092";
-    private static ArrayList<String> items = new ArrayList<>();
-    private static ArrayList<String> countries = new ArrayList<>();
+    private static ArrayList<Integer> items = new ArrayList<>();
+    private static ArrayList<Integer> countries = new ArrayList<>();
 
     public static void main(String[] args) {
 
@@ -53,10 +53,10 @@ public class DBInfo {
             for (ConsumerRecord<String, String> record : records) {
                 String[] recordInfo = splitValues(record);
                 if(recordInfo[2].equals("\"country\"")){
-                    countries.add(recordInfo[1]); 
+                    countries.add(Integer.parseInt(recordInfo[0])); 
                 }
                 else{
-                    items.add(recordInfo[1]);
+                    items.add(Integer.parseInt(recordInfo[0])); 
                 }
                 /*
                  * JSONObject json; HashMap<String, Object> yourHashMap = new
@@ -75,7 +75,12 @@ public class DBInfo {
         String topicName = "Sales";
 
         Producer<String, String> saleProducer = makeProducer();
-        String message = createSale();
+
+        String message = "";
+
+        if(countries.size()>0 && items.size()>0){
+            message = createSale();
+        }
 
         saleProducer.send(new ProducerRecord<String, String>(topicName, null, message));
         saleProducer.close();
@@ -99,15 +104,19 @@ public class DBInfo {
         String topicName = "Purchases";
 
         Producer<String, String> purchaseProducer = makeProducer();
-        String message = createPuchase();
+
+        String message = "";
+        if(countries.size()>0 && items.size()>0){
+            message = createPurchase();
+        }
 
         purchaseProducer.send(new ProducerRecord<String, String>(topicName, null, message));
         purchaseProducer.close();
     }
 
-    private static String createPuchase() {
+    private static String createPurchase() {
         Random rand = new Random();
-        int item = rand.nextInt(items.size() - 1);
+        int item = rand.nextInt(items.size());
         int quantidade = rand.nextInt(100);
         double preço = rand.nextDouble();
 
@@ -138,28 +147,28 @@ public class DBInfo {
         System.out.println(record.value());
 
         String[] recordSplit = record.value().split("\"payload\":\\{");
-        System.out.println(recordSplit[1]);
+        //System.out.println(recordSplit[1]);
         
         String[] recordSplit2 = recordSplit[1].split(",");
-        System.out.println(recordSplit2[0]);
+        /*System.out.println(recordSplit2[0]);
         System.out.println(recordSplit2[1]);
-        System.out.println(recordSplit2[2]);
+        System.out.println(recordSplit2[2]);*/
         
 
         String[] recordSplit3 = recordSplit2[2].split("\\}");
-        System.out.println("3.0" + recordSplit3[0]);
+        //System.out.println("3.0" + recordSplit3[0]);
 
         String[] recordSplit5 = recordSplit2[1].split("\\}");
-        System.out.println("5.1" + recordSplit5[0]);
+        //System.out.println("5.1" + recordSplit5[0]);
 
         String[] nameSplit = recordSplit2[1].split("\\}");
-        System.out.println("5.1" + nameSplit[0]);
+        //System.out.println("5.1" + nameSplit[0]);
 
         String[] typeSplit = recordSplit3[0].split(":");
-        System.out.println("type " + typeSplit[1]);
+        //System.out.println("type " + typeSplit[1]);
 
         String[] idSplit = recordSplit2[0].split(":");
-        System.out.println("id " + idSplit[1]);
+        //System.out.println("id " + idSplit[1]);
 
         String[] info = new String[3];
         info[0] = idSplit[1]; //id

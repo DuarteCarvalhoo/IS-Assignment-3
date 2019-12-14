@@ -21,6 +21,8 @@ import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.common.serialization.StringDeserializer;
+import org.apache.kafka.streams.StreamsBuilder;
+import org.apache.kafka.streams.kstream.KStream;
 
 public class Sales {
     private final static String topic = "Sales";
@@ -42,17 +44,32 @@ public class Sales {
             ConsumerRecords<String, String> records = consumer.poll(1000);
             for (ConsumerRecord<String, String> record : records) {
                 String[] recordInfo  = splitValues(record);
-                String name = recordInfo[0];
-                int quantidade = Integer.parseInt(recordInfo[1]);
-                double preço = Double.parseDouble(recordInfo[2]);
-                String country = recordInfo[3];
 
-                double revenue = preço*quantidade;
+                if(!recordInfo[0].equals("")){
+                    int id = Integer.parseInt(recordInfo[0]);
+                    int quantidade = Integer.parseInt(recordInfo[1]);
+                    double preço = Double.parseDouble(recordInfo[2]);
+                    String country = recordInfo[3];
+
+                    double revenue = preço*quantidade;
+                } 
             }
         }
     }
 
+    public static KStream<String,Long> makeKStream(){
+        StreamsBuilder builder = new StreamsBuilder();
+        KStream<String, Long> lines = builder.stream(topic);
+
+
+
+        return lines;
+    }
+
     public static String[] splitValues(ConsumerRecord<String,String> record){
+        try{
+            //System.out.println(record.value());
+
         String[] salesSplit = record.value().split(" ");
         //System.out.println(salesSplit[2]);
 
@@ -65,16 +82,26 @@ public class Sales {
         String[] nameSplit = saleSplit[0].split(":");
         //System.out.println(nameSplit[1]);
 
-        String[] counrtySplit = saleSplit[3].split(":");
-        //System.out.println(counrtySplit[1]);
+        String[] countrySplit = saleSplit[3].split(":");
+        //System.out.println(countrySplit[1]);
 
 
         String[] info = new String[4];
-        info[0] = nameSplit[1]; //name
+        info[0] = nameSplit[1]; //id
         info[1] = saleSplit[1]; //quantidade
         info[2] = saleSplit[2]; //preço
-        info[3] = counrtySplit[1]; //country
+        info[3] = countrySplit[1]; //country
 
+        return info;
+        }catch(ArrayIndexOutOfBoundsException e){
+            System.out.println("here");
+        }
+
+        String[] info = new String[4];
+        info[0] = ""; //id
+        info[1] = ""; //quantidade
+        info[2] = ""; //preço
+        info[3] = ""; //country
         return info;
     }
 }
