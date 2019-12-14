@@ -50,7 +50,9 @@ public class DBInfo {
         while (true) {
             ConsumerRecords<String, String> records = consumer.poll(1000);
             for (ConsumerRecord<String, String> record : records) {
-                splitValues(record);
+                String item = splitValues(record);
+                items.add(item);
+                countries.add(item);
                 /*
                  * JSONObject json; HashMap<String, Object> yourHashMap = new
                  * Gson().fromJson(json.toString(), HashMap.class); try { json = (JSONObject)
@@ -59,8 +61,8 @@ public class DBInfo {
                  */
             }
 
-            //makeSale();
-            //makePurchase();
+            makeSale();
+            makePurchase();
         }
     }
 
@@ -76,12 +78,12 @@ public class DBInfo {
 
     public static String createSale() {
         Random rand = new Random();
-        int country = rand.nextInt(countries.size() - 1);
-        int item = rand.nextInt(items.size() - 1);
+        int country = rand.nextInt(countries.size());
+        int item = rand.nextInt(items.size());
         int quantidade = rand.nextInt(50);
         double preço = rand.nextDouble();
 
-        String message = "New sale: " + item + "," + quantidade + "," + preço + "," + country;
+        String message = "New sale: " + items.get(item) + "," + quantidade + "," + preço + "," + countries.get(country);
         return message;
     }
 
@@ -101,7 +103,7 @@ public class DBInfo {
         int quantidade = rand.nextInt(100);
         double preço = rand.nextDouble();
 
-        String message = "New purchase: " + item + "," + quantidade + "," + preço;
+        String message = "New purchase: " + items.get(item) + "," + quantidade + "," + preço;
         return message;
     }
 
@@ -134,12 +136,10 @@ public class DBInfo {
         String[] recordSplit3 = recordSplit2[1].split("\\}");
         System.out.println(recordSplit3[0]);
 
+        String[] recordSplit4 = recordSplit3[0].split(":");
+        System.out.println(recordSplit4[1]);
 
-
-        String[] idSplit = recordSplit2[0].split(":");
-        int id = Integer.parseInt(idSplit[1]);
-
-        return "";
+        return recordSplit4[1];
     }
 
 }
