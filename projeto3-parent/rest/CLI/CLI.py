@@ -12,6 +12,8 @@ def main():
             api_endpoints(endpoint,"")
 
 
+
+#FALTAM ENDPOINTS AQUI A PARTIR DO REQUISITO 11 INCLUSIVE
 def api_endpoints(endpoint, name): 
     if(endpoint == "/additem"):
         d = {'name' : name}
@@ -34,6 +36,36 @@ def api_endpoints(endpoint, name):
     elif(endpoint == "/highestprofititem"):
         d = {}
         request = requests.get(url = "http://localhost:8000/api/statistics/highestprofititem", data = d)
+        response = request.text
+        print(response)
+    elif(endpoint == "/revenueperitem"):
+        d = {}
+        request = requests.get(url = "http://localhost:8000/api/statistics/revenuebyitem", data = d)
+        response = request.text
+        print(response)
+    elif(endpoint == "/expensesperitem"):
+        d = {}
+        request = requests.get(url = "http://localhost:8000/api/statistics/expensesbyitem", data = d)
+        response = request.text
+        print(response)
+    elif(endpoint == "/profitperitem"):
+        d = {}
+        request = requests.get(url = "http://localhost:8000/api/statistics/profitbyitem", data = d)
+        response = request.text
+        print(response)
+    elif(endpoint == "/totalrevenue"):
+        d = {}
+        request = requests.get(url = "http://localhost:8000/api/statistics/totalrevenue", data = d)
+        response = request.text
+        print(response)
+    elif(endpoint == "/totalexpenses"):
+        d = {}
+        request = requests.get(url = "http://localhost:8000/api/statistics/totalexpenses", data = d)
+        response = request.text
+        print(response)
+    elif(endpoint == "/totalprofit"):
+        d = {}
+        request = requests.get(url = "http://localhost:8000/api/statistics/totalprofit", data = d)
         response = request.text
         print(response)
     else:

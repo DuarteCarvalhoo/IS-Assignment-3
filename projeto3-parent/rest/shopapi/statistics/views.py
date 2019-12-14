@@ -3,6 +3,8 @@ from __future__ import unicode_literals
 
 from dbinfo.models import Instance
 
+import decimal
+
 from django.http import *
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
@@ -27,18 +29,33 @@ def list_database_items(request):
 
 @csrf_exempt
 def get_revenue_by_item(request):
-    #TO DO
-    return HttpResponse()
+    item_list = list(Instance.objects.filter(data_type="item"))
+    message = ""
+    for item in item_list:
+        revenue = decimal.Decimal(item.revenue)
+        revenue = str(revenue)
+        message += "Revenue for " + item.name + ": " + revenue + "\n"
+    return HttpResponse(message)
 
 @csrf_exempt
 def get_expenses_by_item(request):
-    #TO DO
-    return HttpResponse()
+    item_list = list(Instance.objects.filter(data_type="item"))
+    message = ""
+    for item in item_list:
+        expenses = decimal.Decimal(item.expenses)
+        expenses = str(expenses)
+        message += "Expenses for " + item.name + ": " + expenses + "\n"
+    return HttpResponse(message)
 
 @csrf_exempt
 def get_profit_by_item(request):
-    #TO DO
-    return HttpResponse()
+    item_list = list(Instance.objects.filter(data_type="item"))
+    message = ""
+    for item in item_list:
+        profit = decimal.Decimal(item.profit)
+        profit = str(profit)
+        message += "Profit for " + item.name + ": " + profit + "\n"
+    return HttpResponse(message)
 
 @csrf_exempt
 def get_total_revenue(request):
