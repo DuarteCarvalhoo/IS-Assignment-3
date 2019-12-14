@@ -60,9 +60,7 @@ public class Sales {
     public static KStream<String,Long> makeKStream(){
         StreamsBuilder builder = new StreamsBuilder();
         KStream<String, Long> lines = builder.stream(topic);
-
-
-
+        
         return lines;
     }
 

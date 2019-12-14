@@ -47,23 +47,32 @@ public class DBInfo {
         consumer.subscribe(Collections.singletonList(topic));
 
         JSONParser parser = new JSONParser();
-        ObjectMapper mapper = new ObjectMapper();
         while (true) {
             ConsumerRecords<String, String> records = consumer.poll(1000);
             for (ConsumerRecord<String, String> record : records) {
-                String[] recordInfo = splitValues(record);
-                if(recordInfo[2].equals("\"country\"")){
-                    countries.add(Integer.parseInt(recordInfo[0])); 
+                try {
+                    JSONObject json = (JSONObject) parser.parse(record.value());
+                    String payload = json.get("payload").toString();
+                    JSONObject fields = (JSONObject) parser.parse(payload);
+                    
+                    String name = fields.get("name").toString();
+                    String type = fields.get("data_type").toString();
+                    float revenue = Float.parseFloat(fields.get("revenue").toString());
+                    float expenses = Float.parseFloat(fields.get("expenses").toString());
+                    float profit = Float.parseFloat(fields.get("profit").toString());
+                    int id = Integer.parseInt(fields.get("id").toString());
+
+                    if(type.equals("country")){
+                        countries.add(id); 
+                    }
+                    else{
+                        items.add(id); 
+                    }
+
+                } catch (ParseException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
                 }
-                else{
-                    items.add(Integer.parseInt(recordInfo[0])); 
-                }
-                /*
-                 * JSONObject json; HashMap<String, Object> yourHashMap = new
-                 * Gson().fromJson(json.toString(), HashMap.class); try { json = (JSONObject)
-                 * parser.parse(record.value()); }catch (ParseException e) { // TODO
-                 * Auto-generated catch block e.printStackTrace(); }
-                 */
             }
 
             makeSale();
