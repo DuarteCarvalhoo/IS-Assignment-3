@@ -68,6 +68,36 @@ def api_endpoints(endpoint, name):
         request = requests.get(url = "http://localhost:8000/api/statistics/totalprofit", data = d)
         response = request.text
         print(response)
+    elif(endpoint == "/averageamoutitem"):
+        d = {}
+        request = requests.get(url = "http://localhost:8000/api/statistics/averageamoutitem", data = d)
+        response = request.text
+        print(response)
+    elif(endpoint == "/averageamout"):
+        d = {}
+        request = requests.get(url = "http://localhost:8000/api/statistics/averageamout", data = d)
+        response = request.text
+        print(response)
+    elif(endpoint == "/highestprofit"):
+        d = {}
+        request = requests.get(url = "http://localhost:8000/api/statistics/highestprofit", data = d)
+        response = request.text
+        print(response)
+    elif(endpoint == "/revenuelasthour"):
+        d = {}
+        request = requests.get(url = "http://localhost:8000/api/statistics/revenuelasthour", data = d)
+        response = request.text
+        print(response)
+    elif(endpoint == "/expenseslasthour"):
+        d = {}
+        request = requests.get(url = "http://localhost:8000/api/statistics/expenseslasthour", data = d)
+        response = request.text
+        print(response)
+    elif(endpoint == "/highestsales"):
+        d = {}
+        request = requests.get(url = "http://localhost:8000/api/statistics/highestsales", data = d)
+        response = request.text
+        print(response)
     else:
         print("Insert a valid endpoint/parameters.")
 
