@@ -1,5 +1,6 @@
 package data;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -86,6 +87,9 @@ public class DBInfo {
         int item = rand.nextInt(items.size());
         int quantidade = rand.nextInt(50);
         double preço = rand.nextDouble();
+        
+        double p = Math.round(preço*100);
+        preço = p / 100.0;
 
         String message = "New sale: " + items.get(item) + "," + quantidade + "," + preço + "," + countries.get(country);
         return message;
@@ -106,6 +110,9 @@ public class DBInfo {
         int item = rand.nextInt(items.size() - 1);
         int quantidade = rand.nextInt(100);
         double preço = rand.nextDouble();
+
+        double p = Math.round(preço*100);
+        preço = p / 100.0;
 
         String message = "New purchase: " + items.get(item) + "," + quantidade + "," + preço;
         return message;
