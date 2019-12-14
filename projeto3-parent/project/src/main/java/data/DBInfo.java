@@ -158,8 +158,11 @@ public class DBInfo {
         String[] typeSplit = recordSplit3[0].split(":");
         System.out.println("type " + typeSplit[1]);
 
+        String[] idSplit = recordSplit2[0].split(":");
+        System.out.println("id " + idSplit[1]);
+
         String[] info = new String[3];
-        info[0] = "aa"; //id
+        info[0] = idSplit[1]; //id
         info[1] = nameSplit[0]; //name
         info[2] = typeSplit[1]; //type
 
