@@ -1,7 +1,5 @@
 from django.shortcuts import render
 
-from .models import Country, Item
-
 from django.http import *
 from django.views.decorators.csrf import csrf_exempt
 
@@ -9,12 +7,12 @@ from django.views.decorators.csrf import csrf_exempt
 
 @csrf_exempt
 def add_country(request):
-    country = Country("3","japao")
+    country = Instance("3","japao","country")
     country.save()
     return HttpResponse()
 
 @csrf_exempt
 def add_item(request):
-    item = Item("1","pen",99.99)
+    item = Instance("1","pen","item")
     item.save()
     return HttpResponse()

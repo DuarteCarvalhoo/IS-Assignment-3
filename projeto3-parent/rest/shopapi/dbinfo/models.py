@@ -2,20 +2,12 @@ from django.db import models
 
 # Create your models here.
 
-class Item(models.Model):
+class Instance(models.Model):
 
     class Meta:
-        db_table = 'item'
+        db_table = 'instances'
 
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=100)
-
-class Country(models.Model):
-
-    class Meta:
-        db_table = 'countries'
-
-
-    id = models.AutoField(primary_key=True)
-    name = models.CharField(max_length=50)
+    data_type = models.CharField(max_length=10)
 

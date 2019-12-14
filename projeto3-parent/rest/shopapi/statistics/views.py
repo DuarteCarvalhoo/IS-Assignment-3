@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-from dbinfo.models import Country, Item
-
 from django.http import *
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
@@ -11,7 +9,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 @csrf_exempt
 def list_database_countries(request):
-    country_list = list(Country.objects.filter())
+    country_list = list(Instance.objects.filter(data_type="country"))
     countries = ""
     for country in country_list:
         countries += country.name + ", "
@@ -19,7 +17,7 @@ def list_database_countries(request):
 
 @csrf_exempt
 def list_database_items(request):
-    item_list = list(Item.objects.filter())
+    item_list = list(Instance.objects.filter(data_type="item"))
     items = ""
     for item in item_list:
         items += item.name + ", "

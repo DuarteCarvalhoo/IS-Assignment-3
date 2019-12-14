@@ -50,9 +50,13 @@ public class DBInfo {
         while (true) {
             ConsumerRecords<String, String> records = consumer.poll(1000);
             for (ConsumerRecord<String, String> record : records) {
-                String item = splitValues(record);
-                items.add(item);
-                countries.add(item);
+                String[] recordInfo = splitValues(record);
+                if(recordInfo[2].equals("\"country\"")){
+                    countries.add(recordInfo[1]); 
+                }
+                else{
+                    items.add(recordInfo[1]);
+                }
                 /*
                  * JSONObject json; HashMap<String, Object> yourHashMap = new
                  * Gson().fromJson(json.toString(), HashMap.class); try { json = (JSONObject)
@@ -123,7 +127,7 @@ public class DBInfo {
         return producer;
     }
 
-    public static String splitValues(ConsumerRecord<String,String> record){
+    public static String[] splitValues(ConsumerRecord<String,String> record){
         System.out.println(record.value());
 
         String[] recordSplit = record.value().split("\"payload\":\\{");
@@ -132,14 +136,28 @@ public class DBInfo {
         String[] recordSplit2 = recordSplit[1].split(",");
         System.out.println(recordSplit2[0]);
         System.out.println(recordSplit2[1]);
+        System.out.println(recordSplit2[2]);
+        
 
-        String[] recordSplit3 = recordSplit2[1].split("\\}");
-        System.out.println(recordSplit3[0]);
+        String[] recordSplit3 = recordSplit2[2].split("\\}");
+        System.out.println("3.0" + recordSplit3[0]);
 
-        String[] recordSplit4 = recordSplit3[0].split(":");
-        System.out.println(recordSplit4[1]);
+        String[] recordSplit5 = recordSplit2[1].split("\\}");
+        System.out.println("5.1" + recordSplit5[0]);
 
-        return recordSplit4[1];
+        String[] nameSplit = recordSplit2[1].split("\\}");
+        System.out.println("5.1" + nameSplit[0]);
+
+        String[] typeSplit = recordSplit3[0].split(":");
+        System.out.println("type " + typeSplit[1]);
+
+        String[] info = new String[3];
+        info[0] = "aa"; //id
+        info[1] = nameSplit[0]; //name
+        info[2] = typeSplit[1]; //type
+
+
+        return info;
     }
 
 }
