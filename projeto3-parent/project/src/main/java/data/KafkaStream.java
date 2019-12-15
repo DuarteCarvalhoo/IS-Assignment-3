@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.Properties;
 
 import org.apache.kafka.common.serialization.Serdes;
+import org.apache.kafka.connect.source.SourceTask;
 import org.apache.kafka.streams.KafkaStreams;
 import org.apache.kafka.streams.StreamsBuilder;
 import org.apache.kafka.streams.StreamsConfig;
@@ -21,12 +22,14 @@ public class KafkaStream {
         props.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, BOOTSTRAP_SERVERS);
         props.put(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, Serdes.String().getClass());
         props.put(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG, Serdes.String().getClass());
-
+        
 
         StreamsBuilder builder = new StreamsBuilder();
         KStream<String, String> salesStream = builder.stream("Sales");
 
-
+        //KTable<String, Long> outlines = lines.groupByKey().reduce((oldval, newval) -> oldval + newval);
+        //outlines.mapValues((k, v) -> k + " => " + v).toStream().to(outtopicname, Produced.with(Serdes.String(), Serdes.String()));
+        
         KTable<String, String> outlinesS = salesStream.mapValues((v1, v2) -> v1 + v2).groupByKey().reduce((v1,v2) -> {
             String[] salesParts1 = v1.split(",");
             String[] salesParts = v2.split(",");
@@ -52,10 +55,13 @@ public class KafkaStream {
                 Float lastRevenue = Float.parseFloat(v1);
                 
                 itemprofit = revenue + lastRevenue;
+                System.out.println(itemprofit.toString());
                 return itemprofit.toString();
             }
         });
 
+
+        
         outlinesS.toStream().to("Results");
 
 

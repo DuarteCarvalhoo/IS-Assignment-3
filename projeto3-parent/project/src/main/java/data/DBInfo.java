@@ -53,9 +53,9 @@ public class DBInfo {
                     
                     String name = fields.get("name").toString();
                     String type = fields.get("data_type").toString();
-                    float revenue = Float.parseFloat(fields.get("revenue").toString());
-                    float expenses = Float.parseFloat(fields.get("expenses").toString());
-                    float profit = Float.parseFloat(fields.get("profit").toString());
+                    //float revenue = Float.parseFloat(fields.get("revenue").toString());
+                    //float expenses = Float.parseFloat(fields.get("expenses").toString());
+                    //float profit = Float.parseFloat(fields.get("profit").toString());
                     Integer id = Integer.parseInt(fields.get("id").toString());
 
                     if(type.equals("country")){
