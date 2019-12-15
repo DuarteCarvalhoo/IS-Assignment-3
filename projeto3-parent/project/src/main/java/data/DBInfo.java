@@ -5,7 +5,6 @@ import java.util.Collections;
 import java.util.Properties;
 import java.util.Random;
 
-
 //Producer
 import org.apache.kafka.clients.producer.Producer;
 import org.apache.kafka.clients.producer.KafkaProducer;
@@ -50,7 +49,7 @@ public class DBInfo {
                     JSONObject json = (JSONObject) parser.parse(record.value());
                     String payload = json.get("payload").toString();
                     JSONObject fields = (JSONObject) parser.parse(payload);
-                    
+
                     String name = fields.get("name").toString();
                     String type = fields.get("data_type").toString();
                     float revenue = Float.parseFloat(fields.get("revenue").toString());
@@ -58,25 +57,24 @@ public class DBInfo {
                     float profit = Float.parseFloat(fields.get("profit").toString());
                     Integer id = Integer.parseInt(fields.get("id").toString());
 
-                    if(type.equals("country")){
+                    if (type.equals("country")) {
                         for (Integer country : countries) {
-                            if(country==id){
+                            if (country == id) {
                                 countryExists = true;
                             }
                         }
-                        if(!countryExists){
-                            countries.add(id); 
-                        }  
-                    }
-                    else{
+                        if (!countryExists) {
+                            countries.add(id);
+                        }
+                    } else {
                         for (Integer item : items) {
-                            if(item==id){
+                            if (item == id) {
                                 itemExists = true;
                             }
                         }
-                        if(!itemExists){
-                            items.add(id); 
-                        } 
+                        if (!itemExists) {
+                            items.add(id);
+                        }
                     }
 
                 } catch (ParseException e) {
@@ -84,9 +82,16 @@ public class DBInfo {
                     e.printStackTrace();
                 }
             }
-
             makeSale();
             makePurchase();
+            System.out.println("New sale");
+
+            try {
+                Thread.sleep(5000);
+            } catch (InterruptedException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
         }
     }
 
@@ -149,7 +154,7 @@ public class DBInfo {
         double p = Math.round(preço*100);
         preço = p / 100.0;
 
-        String message = items.get(item) + "," + quantidade + "," + preço;
+        String message = quantidade + "," + preço;
 
         String[] info = new String[2];
         info[0] = message;
