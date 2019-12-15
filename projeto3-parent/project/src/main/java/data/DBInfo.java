@@ -1,22 +1,15 @@
 package data;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Properties;
 import java.util.Random;
+
+
 //Producer
-import java.util.Properties;
 import org.apache.kafka.clients.producer.Producer;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerRecord;
-
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.*;
-import com.google.gson.Gson;
 
 import org.apache.kafka.clients.consumer.Consumer;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
@@ -50,7 +43,10 @@ public class DBInfo {
         while (true) {
             ConsumerRecords<String, String> records = consumer.poll(1000);
             for (ConsumerRecord<String, String> record : records) {
+                System.out.println(record.value());
                 try {
+                    boolean itemExists = false;
+                    boolean countryExists = false;
                     JSONObject json = (JSONObject) parser.parse(record.value());
                     String payload = json.get("payload").toString();
                     JSONObject fields = (JSONObject) parser.parse(payload);
@@ -60,13 +56,27 @@ public class DBInfo {
                     float revenue = Float.parseFloat(fields.get("revenue").toString());
                     float expenses = Float.parseFloat(fields.get("expenses").toString());
                     float profit = Float.parseFloat(fields.get("profit").toString());
-                    int id = Integer.parseInt(fields.get("id").toString());
+                    Integer id = Integer.parseInt(fields.get("id").toString());
 
                     if(type.equals("country")){
-                        countries.add(id); 
+                        for (Integer country : countries) {
+                            if(country==id){
+                                countryExists = true;
+                            }
+                        }
+                        if(!countryExists){
+                            countries.add(id); 
+                        }  
                     }
                     else{
-                        items.add(id); 
+                        for (Integer item : items) {
+                            if(item==id){
+                                itemExists = true;
+                            }
+                        }
+                        if(!itemExists){
+                            items.add(id); 
+                        } 
                     }
 
                 } catch (ParseException e) {
@@ -88,25 +98,30 @@ public class DBInfo {
         String message = "";
 
         if(countries.size()>0 && items.size()>0){
-            message = createSale();
+            String[] info = createSale();
+            message = info[0];
+            saleProducer.send(new ProducerRecord<String, String>(topicName, info[1], message));
+            saleProducer.close();
         }
-
-        saleProducer.send(new ProducerRecord<String, String>(topicName, null, message));
-        saleProducer.close();
     }
 
-    public static String createSale() {
+    public static String[] createSale() {
         Random rand = new Random();
         int country = rand.nextInt(countries.size());
-        int item = rand.nextInt(items.size());
+        Integer item = rand.nextInt(items.size());
         int quantidade = rand.nextInt(50);
         double preço = rand.nextDouble();
         
         double p = Math.round(preço*100);
         preço = p / 100.0;
 
-        String message = "New sale: " + items.get(item) + "," + quantidade + "," + preço + "," + countries.get(country);
-        return message;
+        String message = quantidade + "," + preço + "," + countries.get(country);
+
+        String[] info = new String[2];
+
+        info[0] = message;
+        info[1] = item.toString();
+        return info;
     }
 
     public static void makePurchase() {
@@ -115,25 +130,31 @@ public class DBInfo {
         Producer<String, String> purchaseProducer = makeProducer();
 
         String message = "";
-        if(countries.size()>0 && items.size()>0){
-            message = createPurchase();
-        }
+        String[] info;
 
-        purchaseProducer.send(new ProducerRecord<String, String>(topicName, null, message));
-        purchaseProducer.close();
+        if(countries.size()>0 && items.size()>0){
+            info = createPurchase();
+            message = info[0];
+            purchaseProducer.send(new ProducerRecord<String, String>(topicName, info[1], message));
+            purchaseProducer.close();
+        }
     }
 
-    private static String createPurchase() {
+    private static String[] createPurchase() {
         Random rand = new Random();
-        int item = rand.nextInt(items.size());
+        Integer item = rand.nextInt(items.size());
         int quantidade = rand.nextInt(100);
         double preço = rand.nextDouble();
 
         double p = Math.round(preço*100);
         preço = p / 100.0;
 
-        String message = "New purchase: " + items.get(item) + "," + quantidade + "," + preço;
-        return message;
+        String message = items.get(item) + "," + quantidade + "," + preço;
+
+        String[] info = new String[2];
+        info[0] = message;
+        info[1] = item.toString();
+        return info;
     }
 
     public static Producer<String, String> makeProducer() {
@@ -150,42 +171,6 @@ public class DBInfo {
         Producer<String, String> producer = new KafkaProducer<>(props);
 
         return producer;
-    }
-
-    public static String[] splitValues(ConsumerRecord<String,String> record){
-        System.out.println(record.value());
-
-        String[] recordSplit = record.value().split("\"payload\":\\{");
-        //System.out.println(recordSplit[1]);
-        
-        String[] recordSplit2 = recordSplit[1].split(",");
-        /*System.out.println(recordSplit2[0]);
-        System.out.println(recordSplit2[1]);
-        System.out.println(recordSplit2[2]);*/
-        
-
-        String[] recordSplit3 = recordSplit2[2].split("\\}");
-        //System.out.println("3.0" + recordSplit3[0]);
-
-        String[] recordSplit5 = recordSplit2[1].split("\\}");
-        //System.out.println("5.1" + recordSplit5[0]);
-
-        String[] nameSplit = recordSplit2[1].split("\\}");
-        //System.out.println("5.1" + nameSplit[0]);
-
-        String[] typeSplit = recordSplit3[0].split(":");
-        //System.out.println("type " + typeSplit[1]);
-
-        String[] idSplit = recordSplit2[0].split(":");
-        //System.out.println("id " + idSplit[1]);
-
-        String[] info = new String[3];
-        info[0] = idSplit[1]; //id
-        info[1] = nameSplit[0]; //name
-        info[2] = typeSplit[1]; //type
-
-
-        return info;
     }
 
 }
